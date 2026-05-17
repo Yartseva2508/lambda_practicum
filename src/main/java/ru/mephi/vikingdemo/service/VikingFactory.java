@@ -28,6 +28,26 @@ public class VikingFactory {
         );
     }
 
+    public Viking createViking(
+            String name,
+            int age,
+            int heightCm,
+            HairColor hairColor,
+            BeardStyle beardStyle) {
+
+        return new Viking(name, age, heightCm, hairColor, beardStyle, createRandomEquipment());
+    }
+
+    public Viking createViking(
+            String name,
+            int age,
+            int heightCm,
+            HairColor hairColor,
+            BeardStyle beardStyle, List<EquipmentItem> lst) {
+
+        return new Viking(name, age, heightCm, hairColor, beardStyle, lst);
+    }
+
     private List<EquipmentItem> createRandomEquipment() {
         return List.of(
                 EquipmentFactory.createItem(),

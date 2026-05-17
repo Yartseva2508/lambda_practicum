@@ -7,6 +7,8 @@ package ru.mephi.vikingdemo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mephi.vikingdemo.gui.VikingDesktopFrame;
+import ru.mephi.vikingdemo.model.BeardStyle;
+import ru.mephi.vikingdemo.model.HairColor;
 import ru.mephi.vikingdemo.service.VikingService;
 
 /**
@@ -30,4 +32,32 @@ public class VikingListener {
     void testAdd() {
         gui.addNewViking(service.createRandomViking());
     }
+
+    void testAdd(
+            String name,
+            int age,
+            int heightCm,
+            HairColor hairColor,
+            BeardStyle beardStyle) {
+
+        gui.addNewViking(service.createViking(name, age, heightCm, hairColor, beardStyle));
+    }
+
+    void testEdit(
+            int id,
+            String name,
+            Integer age,
+            Integer heightCm,
+            HairColor hairColor,
+            BeardStyle beardStyle) {
+
+        gui.editViking(id, service.editViking(id, name, age, heightCm, hairColor, beardStyle));
+    }
+
+    void manyAdd()
+    {
+        gui.addNewVikings(service.createVikings());
+    }
+
+    void testDelete(int id) { gui.deleteViking(service.removeVik(id)); }
 }

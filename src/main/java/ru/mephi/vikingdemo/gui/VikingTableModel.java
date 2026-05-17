@@ -11,12 +11,32 @@ import java.util.stream.Collectors;
 public class VikingTableModel extends AbstractTableModel {
 
     private final String[] columns = {"Name", "Age", "Height (cm)", "Hair color", "Beard style", "Equipment"};
-    private final List<Viking> data = new ArrayList<>();
+    private List<Viking> data = new ArrayList<>();
 
     public void addViking(Viking viking) {
         int row = data.size();
         data.add(viking);
         fireTableRowsInserted(row, row);
+    }
+
+    public void deleteViking(int id) {
+        data.remove(id);
+        fireTableRowsDeleted(id, id);
+    }
+
+    public void editViking(int id, Viking viking) {
+        data.set(id, viking);
+        fireTableRowsUpdated(id, id);
+    }
+
+    public void addVikings(List<Viking> vikings) {
+        data.addAll(vikings);
+        fireTableDataChanged();
+    }
+
+    public void editVikings(List<Viking> vikings) {
+        data = vikings;
+        fireTableDataChanged();
     }
 
     @Override

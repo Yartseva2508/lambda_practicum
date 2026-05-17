@@ -13,12 +13,14 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.List;
 
 
 public class VikingDesktopFrame extends JFrame {
 
     private final VikingService vikingService;
     private final VikingTableModel tableModel = new VikingTableModel();
+    private final SupportFrame supportFrame;
 
     public VikingDesktopFrame(VikingService vikingService) {
         this.vikingService = vikingService;
@@ -43,14 +45,25 @@ public class VikingDesktopFrame extends JFrame {
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
         add(bottomPanel, BorderLayout.SOUTH);
+
+        supportFrame = new SupportFrame(vikingService);
     }
 
     private void onCreateViking() {
         Viking viking = vikingService.createRandomViking();
         tableModel.addViking(viking);
+        supportFrame.refresh();
     }
     
     public void addNewViking(Viking viking){
         tableModel.addViking(viking);
+        supportFrame.refresh();
+    }
+    public void editViking(int id, Viking viking) { tableModel.editViking(id, viking); supportFrame.refresh(); }
+    public void deleteViking(int id) {tableModel.deleteViking(id); supportFrame.refresh();}
+
+    public void addNewVikings(List<Viking> vikings){
+        tableModel.addVikings(vikings);
+        supportFrame.refresh();
     }
 }
