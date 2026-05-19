@@ -1,14 +1,10 @@
 package ru.mephi.vikingdemo.gui;
 
-import ru.mephi.vikingdemo.model.BeardStyle;
-import ru.mephi.vikingdemo.model.HairColor;
-import ru.mephi.vikingdemo.model.Viking;
+import ru.mephi.vikingdemo.service.ServiceLambda;
 import ru.mephi.vikingdemo.service.VikingService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Comparator;
-import java.util.List;
 
 public class SupportFrame extends JFrame {
 
@@ -17,11 +13,14 @@ public class SupportFrame extends JFrame {
     private final VikingTableModel tableModel3 = new VikingTableModel();
 
     private final VikingService vikingService;
+    private final ServiceLambda serviceLambda;
 
     public SupportFrame(
-            VikingService vikingService
+            VikingService vikingService,
+            ServiceLambda serviceLambda
     ){
         this.vikingService = vikingService;
+        this.serviceLambda = serviceLambda;
         this.setVisible(true);
         this.setSize(1000, 420);
         this.setLayout(new GridLayout(3, 1));
@@ -39,29 +38,9 @@ public class SupportFrame extends JFrame {
         add(new JScrollPane(vikingTable3));
     }
 
-    public void refresh()
-    {
-        tableModel1.editVikings(redBeards(vikingService.findAll()));
-        tableModel2.editVikings(legendary(vikingService.findAll()));
-        tableModel3.editVikings(randomTallViking(vikingService.findAll()));
+    public void refresh() {
+        tableModel1.editVikings(serviceLambda.randomTallViking(vikingService.findAll()));
+        tableModel2.editVikings(serviceLambda.legendary(vikingService.findAll()));
+        tableModel3.editVikings(serviceLambda.redBeards(vikingService.findAll()));
     }
-
-    public List<Viking> redBeards (List<Viking> vikings)
-    {
-        return vikings.stream().filter(viking -> viking.beardStyle() != BeardStyle.CLEAN_SHAVEN
-                && viking.hairColor() == HairColor.Red).sorted((o1, o2) -> o1.age() - o2.age()).toList();
-    }
-
-    public List<Viking> legendary (List<Viking> vikings)
-    {
-        return vikings.stream().filter(vik -> vik.equipment().stream()
-                .anyMatch(equipmentItem -> equipmentItem.quality() == "Legendary")).toList();
-    }
-
-    public List<Viking> randomTallViking (List<Viking> vikings)
-    {
-        return List.of(vikings.stream().filter(viking -> viking.heightCm() > 180).findAny().get());
-    }
-
-
 }

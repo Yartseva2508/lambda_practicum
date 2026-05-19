@@ -4,8 +4,12 @@ import org.springframework.stereotype.Service;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
 import ru.mephi.vikingdemo.model.Viking;
+import java.util.Comparator;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
 
 @Service
 public class ServiceLambda {
@@ -45,17 +49,32 @@ public class ServiceLambda {
     public List<Viking> filterByAxe (List<Viking> vikings)
     {
         return vikings.stream().filter(vik -> List.of(1L, 2L).contains(vik.equipment().stream()
-                .filter(equipmentItem -> equipmentItem.name() == "Axe").count())).toList();
+                .filter(equipmentItem -> "Axe".equals(equipmentItem.name())).count())).toList();
     }
 
-    public List<Integer> filterEven (List<Integer> numbers)
-    {
-        return  numbers.stream().filter(x -> x % 2 == 0).toList();
+    public Integer findMaxId(Integer[] ids) {
+        return Arrays.stream(ids).max(Comparator.naturalOrder()).orElse(null);
     }
 
-    public Integer filterLast (List<Integer> numbers)
+    public List<Integer> findAllEvenIds(Integer[] ids) {
+        return Arrays.stream(ids).filter(id -> id % 2 == 0).toList();
+    }
+
+    public List<Viking> redBeards (List<Viking> vikings)
     {
-        return  numbers.reversed().stream().limit(1).toList().getFirst();
+        return vikings.stream().filter(viking -> viking.beardStyle() != BeardStyle.CLEAN_SHAVEN
+                && viking.hairColor() == HairColor.Red).sorted((o1, o2) -> o1.age() - o2.age()).toList();
+    }
+
+    public List<Viking> legendary (List<Viking> vikings)
+    {
+        return vikings.stream().filter(vik -> vik.equipment().stream()
+                .anyMatch(equipmentItem -> equipmentItem.quality() == "Legendary")).toList();
+    }
+
+    public List<Viking> randomTallViking (List<Viking> vikings)
+    {
+        return List.of(vikings.stream().filter(viking -> viking.heightCm() > 180).findAny().get());
     }
 
 }
