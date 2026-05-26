@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class VikingService {
-    // каждый раз при изменении создаётся новая копия списка 
     private final CopyOnWriteArrayList<Viking> vikings = new CopyOnWriteArrayList<>();
     private final VikingFactory vikingFactory;
     @Autowired
@@ -73,15 +72,11 @@ public class VikingService {
         return viking;
     }
 
-    public List<Viking> createVikings(){
+    public List<Viking> createVikings() {
+        List<Viking> newlyCreated = IntStream.range(0, 10)
+                .mapToObj(x -> vikingFactory.createRandomViking()).toList();
 
-        List<Viking> viks = new ArrayList<>();
-
-        IntStream.range(0, 10).forEach(x -> {
-            viks.add(vikingFactory.createRandomViking());
-            vikings.add(viks.getLast());
-        });
-
-        return vikings;
+        this.vikings.addAll(newlyCreated);
+        return newlyCreated;
     }
 }

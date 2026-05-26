@@ -69,12 +69,11 @@ public class ServiceLambda {
     public List<Viking> legendary (List<Viking> vikings)
     {
         return vikings.stream().filter(vik -> vik.equipment().stream()
-                .anyMatch(equipmentItem -> equipmentItem.quality() == "Legendary")).toList();
+                .anyMatch(equipmentItem -> "Legendary".equals(equipmentItem.quality()))).toList();
     }
 
-    public List<Viking> randomTallViking (List<Viking> vikings)
-    {
-        return List.of(vikings.stream().filter(viking -> viking.heightCm() > 180).findAny().get());
+    public List<Viking> randomTallViking (List<Viking> vikings) {
+        return vikings.stream().filter(viking -> viking.heightCm() > 180).findAny()
+                .map(List::of).orElse(Collections.emptyList());
     }
-
 }
